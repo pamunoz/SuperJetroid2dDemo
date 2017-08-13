@@ -8,19 +8,22 @@ public class Player : MonoBehaviour {
 	public bool standing;
 	public float jetSpeed = 15f;
 	public float airSpeedMultiplier = .3f;
-	Rigidbody2D rigidbody2D;
+
+	private Rigidbody2D rigidBody2D;
+	private PlayerController controller;
 
 	void Start() {
-		rigidbody2D = GetComponent<Rigidbody2D> (); 
+		rigidBody2D = GetComponent<Rigidbody2D> ();
+		controller = GetComponent<PlayerController> ();
 	}
 
 	// Update is called once per frame
 	void Update () {
-		var forceX = 0f;
-		var forceY = 0f;
+		float forceX = 0f;
+		float forceY = 0f;
 
-		var absVelX = Mathf.Abs (rigidbody2D.velocity.x);
-		var absVelY = Mathf.Abs (rigidbody2D.velocity.y);
+		float absVelX = Mathf.Abs (rigidBody2D.velocity.x);
+		float absVelY = Mathf.Abs (rigidBody2D.velocity.y);
 
 		if (absVelY < .2f) {
 			standing = true;
@@ -28,26 +31,24 @@ public class Player : MonoBehaviour {
 			standing = false;
 		}
 
-		if (Input.GetKey ("right")) {
+		if (controller.moving.x != 0) {
+			if (absVelX < maxVelocity.x) {
+				// Movint player left or right
+				forceX = standing ? 
+					speed * controller.moving.x : 
+					(speed * controller.moving.x * airSpeedMultiplier);
 
-			if(absVelX < maxVelocity.x)
-				forceX = standing ? speed : (speed * airSpeedMultiplier);
-
-			transform.localScale = new Vector3(1, 1, 1);
-
-		} else if (Input.GetKey ("left")) {
-
-			if(absVelX < maxVelocity.x)
-				forceX = standing ? -speed : (-speed * airSpeedMultiplier);
-
-			transform.localScale = new Vector3(-1, 1, 1);
+				// Moving the player left or right depending on the direction
+				int leftOrRight = forceX > 0 ? 1 : -1;
+				transform.localScale = new Vector3 (leftOrRight, 1, 1);
+			}
 		}
 
-		if (Input.GetKey ("up")) {
+		if (controller.moving.y > 0) {
 			if(absVelY < maxVelocity.y)
-				forceY = jetSpeed;
+				forceY = jetSpeed * controller.moving.y;
 		}
 
-		rigidbody2D.AddForce (new Vector2 (forceX, forceY));
+		rigidBody2D.AddForce (new Vector2 (forceX, forceY));
 	}
 }
