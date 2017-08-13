@@ -25,8 +25,11 @@ public class Player : MonoBehaviour {
 		float forceX = 0f;
 		float forceY = 0f;
 
+		// Animations states
 		int walkingAnimation = 1;
-		int flyingAnimation = 0;
+		int idleAnimation = 0;
+		int flyingAnimation = 2;
+		int fallingAnimation = 3;
 
 		float absVelX = Mathf.Abs (rigidBody2D.velocity.x);
 		float absVelY = Mathf.Abs (rigidBody2D.velocity.y);
@@ -52,17 +55,24 @@ public class Player : MonoBehaviour {
 			// We set the integer that represent the AnimState to 1 or 0 base on what
 			// the Player is doing
 			// this mean if the player is movient left or right
-			// we want it to be in the walking state
+			// we want it to be in the walking state   
 			animator.SetInteger ("AnimState", walkingAnimation);
 		} else {
-			// If the Player is not movien left or right (up or down) we want in to be in 
-			// another state
-			animator.SetInteger ("AnimState", flyingAnimation);
+			// If the Player is not movien left or right we want in to be in 
+			// idle
+			animator.SetInteger ("AnimState", idleAnimation);
 		}
 
+		// We we controll the flying states
 		if (controller.moving.y > 0) {
 			if(absVelY < maxVelocity.y)
 				forceY = jetSpeed * controller.moving.y;
+
+			// if the player is moving up, we want it to have an flying animation
+			animator.SetInteger ("AnimState", flyingAnimation);
+		} else if (absVelY > 0){
+			// We set the animation to falling
+			animator.SetInteger ("AnimState", fallingAnimation);
 		}
 
 		rigidBody2D.AddForce (new Vector2 (forceX, forceY));
