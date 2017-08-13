@@ -9,30 +9,23 @@ public class Player : MonoBehaviour {
 	public float jetSpeed = 15f;
 	public float airSpeedMultiplier = .3f;
 
-	// Reference to the Animator
 	private Animator animator;
-	private Rigidbody2D rigidBody2D;
 	private PlayerController controller;
+	private Rigidbody2D rigidbody2D;
 
-	void Start() {
-		rigidBody2D = GetComponent<Rigidbody2D> ();
+	void Start(){
+		rigidbody2D = GetComponent<Rigidbody2D> ();
 		controller = GetComponent<PlayerController> ();
 		animator = GetComponent<Animator> ();
 	}
 
 	// Update is called once per frame
 	void Update () {
-		float forceX = 0f;
-		float forceY = 0f;
+		var forceX = 0f;
+		var forceY = 0f;
 
-		// Animations states
-		int walkingAnimation = 1;
-		int idleAnimation = 0;
-		int flyingAnimation = 2;
-		int fallingAnimation = 3;
-
-		float absVelX = Mathf.Abs (rigidBody2D.velocity.x);
-		float absVelY = Mathf.Abs (rigidBody2D.velocity.y);
+		var absVelX = Mathf.Abs (rigidbody2D.velocity.x);
+		var absVelY = Mathf.Abs (rigidbody2D.velocity.y);
 
 		if (absVelY < .2f) {
 			standing = true;
@@ -40,41 +33,27 @@ public class Player : MonoBehaviour {
 			standing = false;
 		}
 
-		// We set condition testing wheter the player is moving left or right
 		if (controller.moving.x != 0) {
 			if (absVelX < maxVelocity.x) {
-				// Movint player left or right
-				forceX = standing ? 
-					speed * controller.moving.x : 
-					(speed * controller.moving.x * airSpeedMultiplier);
 
-				// Moving the player left or right depending on the direction
-				int leftOrRight = forceX > 0 ? 1 : -1;
-				transform.localScale = new Vector3 (leftOrRight, 1, 1);
+				forceX = standing ? speed * controller.moving.x : (speed * controller.moving.x * airSpeedMultiplier);
+
+				transform.localScale = new Vector3 (forceX > 0 ? 1 : -1, 1, 1);
 			}
-			// We set the integer that represent the AnimState to 1 or 0 base on what
-			// the Player is doing
-			// this mean if the player is movient left or right
-			// we want it to be in the walking state   
-			animator.SetInteger ("AnimState", walkingAnimation);
+			animator.SetInteger ("AnimState", 1);
 		} else {
-			// If the Player is not movien left or right we want in to be in 
-			// idle
-			animator.SetInteger ("AnimState", idleAnimation);
+			animator.SetInteger ("AnimState", 0);
 		}
 
-		// We we controll the flying states
 		if (controller.moving.y > 0) {
-			if(absVelY < maxVelocity.y)
-				forceY = jetSpeed * controller.moving.y;
+						if (absVelY < maxVelocity.y)
+								forceY = jetSpeed * controller.moving.y;
 
-			// if the player is moving up, we want it to have an flying animation
-			animator.SetInteger ("AnimState", flyingAnimation);
-		} else if (absVelY > 0){
-			// We set the animation to falling
-			animator.SetInteger ("AnimState", fallingAnimation);
-		}
+						animator.SetInteger ("AnimState", 2);
+				} else if (absVelY > 0) {
+			animator.SetInteger("AnimState", 3);
+				}
 
-		rigidBody2D.AddForce (new Vector2 (forceX, forceY));
+		rigidbody2D.AddForce (new Vector2 (forceX, forceY));
 	}
 }

@@ -1,71 +1,63 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class Door : MonoBehaviour {
 
 	public const int IDLE = 0;
 	public const int OPENING = 1;
-	public const int OPEN = 2; 
+	public const int OPEN = 2;
 	public const int CLOSING = 3;
-	public float closeDelay = 0.5f;
-	// idle is the default state of the door
-	private int mState = IDLE;
-
-	private Animator mAnimator;
-	private Collider2D mCollider2D;
+	public float closeDelay = .5f;
+	private int state = IDLE;
+	private Animator animator;
+	private Collider2D collider2D;
 
 	// Use this for initialization
 	void Start () {
-		mAnimator = GetComponent<Animator> ();
-		mCollider2D = GetComponent<Collider2D> ();
+		collider2D = GetComponent<Collider2D> ();
+		animator = GetComponent<Animator> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+	
 	}
 
-	// These methods will track the door state
-	void OnOpenStart() {
-		mState = OPENING;
+	void OnOpenStart(){
+		state = OPENING;
 	}
 
-	void OnOpenEnd() {
-		mState = OPEN;
+	void OnOpenEnd(){
+		state = OPEN;
 	}
 
-	void OnCloseStart() {
-		mState = CLOSING;
+
+	void OnCloseStart(){
+		state = CLOSING;
+	}
+	
+	void OnCloseEnd(){
+		state = IDLE;
 	}
 
-	void OnCloseEnd() {
-		mState = IDLE;
+	void DissableCollider2D(){
+		collider2D.enabled = false;
 	}
 
-	// These methods handle turning on and off the box collider for the door
-	void DisableCollider2D() {
-		mCollider2D.enabled = false;
+	void EnableCollider2D(){
+		collider2D.enabled = true;
 	}
 
-	void EnableCollider2D() {
-		mCollider2D.enabled = true;
+	public void Open(){
+		animator.SetInteger ("AnimState", 1);
 	}
 
-	// These methods handle the public properties of the class
-	// Allowing us to open and close the door.
-	public void Open() {
-		mAnimator.SetInteger ("AnimState", 1);
+	public void Close(){
+		StartCoroutine (CloseNow ());
 	}
 
-	public void Close() {
-		// Here we want the door closing with a delay
-		// calling a method in a separate thread
-		StartCoroutine (CloseNow());
-	}
-
-	private IEnumerator CloseNow() {
-		yield return new WaitForSeconds (closeDelay);
-		mAnimator.SetInteger ("AnimState", 2);
+	private IEnumerator CloseNow(){
+		yield return new WaitForSeconds(closeDelay);
+		animator.SetInteger ("AnimState", 2);
 	}
 }

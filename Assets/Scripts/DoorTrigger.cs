@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Switch : MonoBehaviour {
+public class DoorTrigger : MonoBehaviour {
 
-	private Animator animator;
+	public Door door;
 
 	// Use this for initialization
 	void Start () {
-		animator = GetComponent<Animator> ();
+	
 	}
 	
 	// Update is called once per frame
@@ -16,10 +16,14 @@ public class Switch : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D target){
-		animator.SetInteger ("AnimState", 1);
+		if (target.gameObject.tag == "Player") {
+			door.Open();
+		}
 	}
 
 	void OnTriggerExit2D(Collider2D target){
-		animator.SetInteger ("AnimState", 2);
+		if (target.gameObject.tag == "Player") {
+			door.Close();
+		}
 	}
 }
