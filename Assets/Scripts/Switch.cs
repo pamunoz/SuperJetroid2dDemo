@@ -43,4 +43,15 @@ public class Switch : MonoBehaviour {
 				trigger.Toggle (false);
 		}
 	}
+
+	/* This method draw a line showing a visual line indicating the connection
+	between elements */
+	void OnDrawGizmos() {
+		Gizmos.color = sticky ? Color.red : Color.green;
+		foreach (DoorTrigger trigger in doorTriggers) {
+			if (trigger != null)
+				/* draw a line from the switch to the door*/
+				Gizmos.DrawLine (transform.position, trigger.door.transform.position);
+		}
+	}
 }
