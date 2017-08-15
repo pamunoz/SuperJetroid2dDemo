@@ -19,6 +19,13 @@ public class Explode : MonoBehaviour {
 		}
 	}
 
+	// This method is trigger on the object colliding with another object
+	void OnCollisionEnter2D(Collision2D target) {
+		if (target.gameObject.tag == "Deadly") {
+			OnExplode ();
+		}
+	}
+
 	void OnExplode() {
 		// This will remove the player from the Scene
 		Destroy (gameObject);

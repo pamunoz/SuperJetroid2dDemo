@@ -7,6 +7,7 @@ public class LookFoward : MonoBehaviour {
 	public Transform sightStart, sightEnds;
 	// wheter there is a collition or not
 	private bool mCollision = false;
+	public bool needsCollision = true;
 
 	// Use this for initialization
 	void Start () {
@@ -18,7 +19,7 @@ public class LookFoward : MonoBehaviour {
 
 		DrawLineOfSight ();
 		
-		if (mCollision)
+		if (mCollision  == needsCollision)
 			TurnAround ();
 
 	}
