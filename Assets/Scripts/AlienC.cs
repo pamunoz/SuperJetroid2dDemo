@@ -5,6 +5,7 @@ using UnityEngine;
 public class AlienC : MonoBehaviour {
 
 	public float attackDelay = 3f;
+	public Projectile projectile;
 
 	private Animator mAnimator;
 
@@ -37,5 +38,11 @@ public class AlienC : MonoBehaviour {
 		int attack = 1;
 		// Change the animation to the attack state
 		mAnimator.SetInteger ("AnimState", attack);
+	}
+
+	void OnShoot() {
+		if (projectile) {
+			Projectile clone = Instantiate (projectile, transform.position, Quaternion.identity) as Projectile;
+		}
 	}
 }
