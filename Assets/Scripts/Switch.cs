@@ -3,8 +3,7 @@ using System.Collections;
 
 public class Switch : MonoBehaviour {
 
-	// This keep track door triggers that switch is connected to
-	public DoorTrigger[] doorTriggers; 
+	public DoorTrigger[] doorTriggers;
 	public bool sticky;
 
 	private bool down;
@@ -25,33 +24,34 @@ public class Switch : MonoBehaviour {
 		down = true;
 
 		foreach (DoorTrigger trigger in doorTriggers) {
-			if (trigger != null)
-				trigger.Toggle (true);
+			if(trigger != null)
+				trigger.Toggle(true);
 		}
 	}
 
 	void OnTriggerExit2D(Collider2D target){
-		// when the player walk off over the switch
-		// the switch wont reset
+
 		if (sticky && down)
 			return;
 
 		animator.SetInteger ("AnimState", 2);
+
 		down = false;
+
 		foreach (DoorTrigger trigger in doorTriggers) {
-			if (trigger != null)
-				trigger.Toggle (false);
+			if(trigger != null)
+				trigger.Toggle(false);
 		}
 	}
 
-	/* This method draw a line showing a visual line indicating the connection
-	between elements */
-	void OnDrawGizmos() {
+	void OnDrawGizmos(){
 		Gizmos.color = sticky ? Color.red : Color.green;
+
 		foreach (DoorTrigger trigger in doorTriggers) {
-			if (trigger != null)
-				/* draw a line from the switch to the door*/
-				Gizmos.DrawLine (transform.position, trigger.door.transform.position);
+			if(trigger != null)
+				Gizmos.DrawLine(transform.position, trigger.door.transform.position);
 		}
+
 	}
+
 }

@@ -11,10 +11,8 @@ public class Player : MonoBehaviour {
 
 	private Animator animator;
 	private PlayerController controller;
-	private Rigidbody2D rigidbody2D;
 
 	void Start(){
-		rigidbody2D = GetComponent<Rigidbody2D> ();
 		controller = GetComponent<PlayerController> ();
 		animator = GetComponent<Animator> ();
 	}
@@ -24,8 +22,8 @@ public class Player : MonoBehaviour {
 		var forceX = 0f;
 		var forceY = 0f;
 
-		var absVelX = Mathf.Abs (rigidbody2D.velocity.x);
-		var absVelY = Mathf.Abs (rigidbody2D.velocity.y);
+		var absVelX = Mathf.Abs (GetComponent<Rigidbody2D>().velocity.x);
+		var absVelY = Mathf.Abs (GetComponent<Rigidbody2D>().velocity.y);
 
 		if (absVelY < .2f) {
 			standing = true;
@@ -54,6 +52,6 @@ public class Player : MonoBehaviour {
 			animator.SetInteger("AnimState", 3);
 				}
 
-		rigidbody2D.AddForce (new Vector2 (forceX, forceY));
+		GetComponent<Rigidbody2D>().AddForce (new Vector2 (forceX, forceY));
 	}
 }

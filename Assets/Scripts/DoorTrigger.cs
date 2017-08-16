@@ -6,7 +6,6 @@ public class DoorTrigger : MonoBehaviour {
 	public Door door;
 	public bool ignoreTrigger;
 
-
 	// Use this for initialization
 	void Start () {
 	
@@ -18,6 +17,7 @@ public class DoorTrigger : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D target){
+
 		if (ignoreTrigger)
 			return;
 
@@ -35,23 +35,22 @@ public class DoorTrigger : MonoBehaviour {
 		}
 	}
 
-	public void Toggle(bool value) {
+	public void Toggle(bool value){
 		if (value)
 			door.Open ();
 		else
 			door.Close ();
 	}
 
-	void OnDrawGizmos() {
+	void OnDrawGizmos(){
 		Gizmos.color = ignoreTrigger ? Color.gray : Color.green;
 
-		// WE get a reference to the box collider2d so we
-		// can calculate the size of the box to draw around the door
-		var bc2d = GetComponent<BoxCollider2D>();
-		var bc2dPos = bc2d.transform.position;
-		var newPos = new Vector2 (bc2dPos.x + bc2d.offset.x, bc2dPos.y + bc2d.offset.y);
+		var bc2d = GetComponent<BoxCollider2D> ();
+		var bc2dPOS = bc2d.transform.position;
+		var newPos = new Vector2 (bc2dPOS.x + bc2d.offset.x, bc2dPOS.y + bc2d.offset.y);
 
-		// draw the box around the door
 		Gizmos.DrawWireCube (newPos, new Vector2 (bc2d.size.x, bc2d.size.y));
+
 	}
+
 }

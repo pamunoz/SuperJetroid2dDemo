@@ -10,11 +10,9 @@ public class Door : MonoBehaviour {
 	public float closeDelay = .5f;
 	private int state = IDLE;
 	private Animator animator;
-	private Collider2D collider2D;
 
 	// Use this for initialization
 	void Start () {
-		collider2D = GetComponent<Collider2D> ();
 		animator = GetComponent<Animator> ();
 	}
 	
@@ -41,11 +39,11 @@ public class Door : MonoBehaviour {
 	}
 
 	void DissableCollider2D(){
-		collider2D.enabled = false;
+		GetComponent<Collider2D>().enabled = false;
 	}
 
 	void EnableCollider2D(){
-		collider2D.enabled = true;
+		GetComponent<Collider2D>().enabled = true;
 	}
 
 	public void Open(){
